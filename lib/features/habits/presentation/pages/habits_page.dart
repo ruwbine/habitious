@@ -51,7 +51,34 @@ class HabitsPage extends StatelessWidget {
         backgroundColor: AppColors.darkBackground,
         elevation: 0.0,
       ),
-      bottomNavigationBar: AppBottomBar(currentIndex: 1)
+      body: Container(child: Center(
+          child: Column(
+            spacing: 10,
+            children: [
+              HabitCard(
+                accentColor: AppColors.lightAccent,
+                title: 'Пить воду',
+                icon: Icon(Icons.water),
+                frequency: 'daily',
+                onTap:() => 'meow',
+                isCompleted: false, ),
+                HabitCard(
+                accentColor: AppColors.lightAccent,
+                title: 'Пить воду',
+                icon: Icon(Icons.water),
+                frequency: 'daily',
+                onTap:() => 'meow',
+                isCompleted: false, ),
+                HabitCard(
+                accentColor: AppColors.lightAccent,
+                title: 'Пить воду',
+                icon: Icon(Icons.water),
+                frequency: 'daily',
+                onTap:() => 'meow',
+                isCompleted: false, )
+            ],),
+      )),
+      bottomNavigationBar: AppBottomBar(currentIndex: 0)
     );
   }
 } 
