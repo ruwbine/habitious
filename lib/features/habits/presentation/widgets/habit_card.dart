@@ -25,13 +25,12 @@ class HabitCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Material(
-      color: colorScheme.surface,
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
         onTap: onTap,
         child: Container(
-          height: 160,
+          height: 130,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
@@ -39,17 +38,21 @@ class HabitCard extends StatelessWidget {
               color: theme.dividerColor,
               width: 1,
             ),
+            gradient: LinearGradient(
+              begin:Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+              AppColors.darkCard.withValues(alpha: 0.8),
+              accentColor.withValues(alpha: 0.7)
+            ])
           ),
           child: Stack(
             children: [
               // icon,
               // TOP LEFT ICON
               Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 26),
-                ),
+                alignment: Alignment.centerLeft,
+                child: Icon(Icons.access_alarm, size: 50)
               ),
 
               // TOP RIGHT CHECK
@@ -91,7 +94,6 @@ class HabitCard extends StatelessWidget {
                       frequency,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.textTheme.bodyMedium?.color
-                            ?.withOpacity(0.6),
                       ),
                     ),
 
@@ -166,7 +168,7 @@ class _HabitProgressTrackerState extends State<HabitProgressTracker> {
                         height: 8,
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
-                          color: isDone ? widget.activeColor : const Color(0xFF2C2C2E), // Серый неактивный
+                          color: isDone ? widget.activeColor : AppColors.darkBorder, // Серый неактивный
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -180,7 +182,7 @@ class _HabitProgressTrackerState extends State<HabitProgressTracker> {
             Text(
               '$completedDays/${widget.totalDays} дней',
               style: const TextStyle(
-                color: Colors.grey,
+                color: AppColors.darkTextPrimary,
                 fontSize: 14,
               ),
             ),

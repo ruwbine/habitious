@@ -51,9 +51,11 @@ class HabitsPage extends StatelessWidget {
         backgroundColor: AppColors.darkBackground,
         elevation: 0.0,
       ),
-      body: Container(child: Center(
+      body: Container(
+        margin: const EdgeInsets.all(16),
+        child: Center(
           child: Column(
-            spacing: 10,
+            spacing: 15,
             children: [
               HabitCard(
                 accentColor: AppColors.lightAccent,
