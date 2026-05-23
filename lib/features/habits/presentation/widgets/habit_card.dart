@@ -35,30 +35,17 @@ class HabitCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: theme.dividerColor,
+              color: theme.focusColor,
               width: 1,
             ),
-            gradient: LinearGradient(
-              begin:Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-              AppColors.darkCard.withValues(alpha: 0.8),
-              accentColor.withValues(alpha: 0.7)
-            ])
           ),
-          child: Stack(
+          child: Column(
             children: [
-              // icon,
-              // TOP LEFT ICON
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(Icons.access_alarm, size: 50)
-              ),
-
-              // TOP RIGHT CHECK
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                Icon(Icons.access_alarm),
+                Container(
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
@@ -73,12 +60,9 @@ class HabitCard extends StatelessWidget {
                     color: isCompleted ? Colors.black : Colors.grey,
                   ),
                 ),
-              ),
+              ],),
 
-              // BOTTOM CONTENT
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
+             Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -97,12 +81,9 @@ class HabitCard extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 10),
-
                     HabitProgressTracker(activeColor: accentColor)
                   ],
                 ),
-              ),
             ],
           ),
         ),

@@ -31,7 +31,7 @@ class AppBottomBar extends StatelessWidget {
         child: BottomNavigationBar(
           currentIndex: currentIndex,
           // onTap: onTap,
-          backgroundColor: AppColors.darkBackground,
+          backgroundColor: AppColors.darkCard,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: const Color(0xFF7B61FF), // Фиолетовый акцент
           unselectedItemColor: Colors.grey,

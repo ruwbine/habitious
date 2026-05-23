@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habitious/core/theme/app_colors.dart';
 import 'package:habitious/core/theme/app_theme.dart';
 import 'package:habitious/features/habits/presentation/widgets/habit_card.dart';
+import 'package:habitious/features/habits/presentation/widgets/status_buttons.dart';
 import 'package:habitious/shared/widgets/bottom_navigation_bar.dart';
 
 class HabitsPage extends StatelessWidget {
@@ -57,6 +58,7 @@ class HabitsPage extends StatelessWidget {
           child: Column(
             spacing: 15,
             children: [
+              StatusButtons(),
               HabitCard(
                 accentColor: AppColors.lightAccent,
                 title: 'Пить воду',
