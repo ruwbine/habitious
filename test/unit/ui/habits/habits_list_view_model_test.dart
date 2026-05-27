@@ -7,8 +7,9 @@ import 'package:habitious/data/models/typed_ids.dart';
 import 'package:habitious/data/models/weekday.dart';
 import 'package:habitious/ui/habits/view_models/habit_list_item.dart';
 import 'package:habitious/ui/habits/view_models/habits_list_view_model.dart';
+import '../../../fakes/fake_clock_service.dart';
+import '../../../fakes/in_memory_completion_repository.dart';
 import '../../../fakes/in_memory_habit_repository.dart';
-import '../../../fakes/in_memory_completion_repository_stub.dart';
 
 Habit _mk(String id, HabitStatus status) => Habit(
       id: HabitId(id),
@@ -27,7 +28,12 @@ void main() {
     final habits = InMemoryHabitRepository();
     await habits.upsertHabit(_mk('a', HabitStatus.active));
     await habits.upsertHabit(_mk('b', HabitStatus.archived));
-    final vm = HabitsListViewModel(habits, InMemoryCompletionRepositoryStub());
+    final clock = FakeClockService(DateTime(2026, 5, 27));
+    final comps = InMemoryCompletionRepository(
+      todayProvider: () => clock.today(),
+      habitLookup: habits.findHabit,
+    );
+    final vm = HabitsListViewModel(habits, comps);
     await vm.load();
     // Give the stream a moment to emit.
     await Future<void>.delayed(Duration.zero);

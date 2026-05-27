@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_preferences.dart';
+import 'data/repositories/completion_repository.dart';
+import 'data/repositories/drift_completion_repository.dart';
 import 'data/repositories/drift_habit_repository.dart';
 import 'data/repositories/habit_repository.dart';
 import 'data/services/app_database.dart';
+import 'data/services/clock_service.dart';
 import 'l10n/app_localizations.dart';
 import 'routing/app_router.dart';
 import 'ui/core/themes/dark_theme.dart';
@@ -24,6 +27,10 @@ class HabitiousApp extends StatelessWidget {
         ),
         ProxyProvider<AppDatabase, HabitRepository>(
           update: (_, db, __) => DriftHabitRepository(db),
+        ),
+        Provider<ClockService>(create: (_) => SystemClockService()),
+        ProxyProvider2<AppDatabase, ClockService, CompletionRepository>(
+          update: (_, db, clock, __) => DriftCompletionRepository(db, clock),
         ),
       ],
       child: Consumer<AppPreferences>(

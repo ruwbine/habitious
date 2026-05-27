@@ -2,15 +2,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../data/models/habit.dart';
 import '../../../data/models/habit_status.dart';
-import '../../../data/models/weekly_progress.dart';
+import '../../../data/repositories/completion_repository.dart';
 import '../../../data/repositories/habit_repository.dart';
 import 'habit_list_item.dart';
 
 class HabitsListViewModel extends ChangeNotifier {
   HabitsListViewModel(this._habits, this._completions);
   final HabitRepository _habits;
-  // ignore: unused_field
-  final dynamic _completions; // replaced by CompletionRepository in Task 23
+  final CompletionRepository _completions;
 
   HabitsTab _tab = HabitsTab.all;
   List<HabitListItem> _items = const [];
@@ -39,26 +38,15 @@ class HabitsListViewModel extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    try {
-      _sub = _habits.watchHabits().listen((list) {
-        _items = list
-            .map(
-              (h) => HabitListItem(
-                habit: h,
-                progress:
-                    const WeeklyProgress(completedDays: 0, scheduledDays: 7),
-                participantsCount: 1,
-              ),
-            )
-            .toList(growable: false);
-        _isLoading = false;
-        notifyListeners();
+    _sub = _habits.watchHabits().listen((list) async {
+      final futures = list.map((h) async {
+        final progress = await _completions.watchWeeklyProgress(h.id).first;
+        return HabitListItem(habit: h, progress: progress, participantsCount: 1);
       });
-    } catch (e) {
-      _error = e;
+      _items = await Future.wait(futures);
       _isLoading = false;
       notifyListeners();
-    }
+    });
   }
 
   void switchTab(HabitsTab tab) {

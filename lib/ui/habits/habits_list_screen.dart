@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../data/repositories/completion_repository.dart';
 import '../../data/repositories/habit_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../core/widgets/habit_card.dart';
@@ -12,15 +13,13 @@ class HabitsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repo = context.read<HabitRepository>();
+    final completions = context.read<CompletionRepository>();
     return ChangeNotifierProvider(
-      create: (_) => HabitsListViewModel(repo, _StubCompletions())..load(),
+      create: (_) => HabitsListViewModel(repo, completions)..load(),
       child: const _Body(),
     );
   }
 }
-
-// ignore: unused_element
-class _StubCompletions {} // replaced in Milestone 3 with real CompletionRepository
 
 class _Body extends StatelessWidget {
   const _Body();
