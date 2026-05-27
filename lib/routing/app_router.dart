@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import '../ui/core/widgets/root_shell.dart';
+import '../ui/habits/create_habit_screen.dart';
 import '../ui/habits/habits_list_screen.dart';
 import '../ui/stats/stats_screen.dart';
 import '../ui/friends/friends_screen.dart';
@@ -19,7 +20,7 @@ GoRouter buildRouter() {
           GoRoute(path: '/profile', builder: (_, __) => const ProfileScreen()),
         ],
       ),
-      // /create and /habit/:id will be added in later milestones (outside shell).
+      GoRoute(path: '/create', builder: (_, __) => const CreateHabitScreen()),
     ],
   );
 }
