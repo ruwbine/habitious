@@ -1,0 +1,1 @@
+enum HabitStatus { active, archived }
