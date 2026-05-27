@@ -5,17 +5,30 @@ import 'data/repositories/completion_repository.dart';
 import 'data/repositories/drift_completion_repository.dart';
 import 'data/repositories/drift_habit_repository.dart';
 import 'data/repositories/habit_repository.dart';
+import 'data/repositories/profile_repository.dart';
 import 'data/services/app_database.dart';
 import 'data/services/clock_service.dart';
 import 'data/services/notification_service.dart';
 import 'l10n/app_localizations.dart';
+import 'profile_sync.dart';
 import 'routing/app_router.dart';
 import 'ui/core/themes/dark_theme.dart';
 import 'ui/core/themes/light_theme.dart';
 
 class HabitiousApp extends StatefulWidget {
-  const HabitiousApp({super.key, required this.notifications});
+  const HabitiousApp({
+    super.key,
+    required this.database,
+    required this.profileRepository,
+    required this.preferences,
+    required this.hardcoreFlag,
+    required this.notifications,
+  });
 
+  final AppDatabase database;
+  final ProfileRepository profileRepository;
+  final AppPreferences preferences;
+  final HardcoreFlag hardcoreFlag;
   final NotificationService notifications;
 
   @override
@@ -23,7 +36,7 @@ class HabitiousApp extends StatefulWidget {
 }
 
 class _HabitiousAppState extends State<HabitiousApp> {
-  late final _router = buildRouter();
+  final _router = buildRouter();
 
   @override
   void initState() {
@@ -32,7 +45,7 @@ class _HabitiousAppState extends State<HabitiousApp> {
       try {
         await widget.notifications.requestPermission();
       } catch (_) {
-        // Permission request can fail silently on simulators/headless tests.
+        // ignore failures on simulators/headless tests
       }
     });
   }
@@ -41,19 +54,18 @@ class _HabitiousAppState extends State<HabitiousApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AppPreferences()),
-        Provider<AppDatabase>(
-          create: (_) => AppDatabase(),
-          dispose: (_, db) => db.close(),
-        ),
+        ChangeNotifierProvider.value(value: widget.preferences),
+        ChangeNotifierProvider.value(value: widget.hardcoreFlag),
+        Provider<AppDatabase>.value(value: widget.database),
+        Provider<NotificationService>.value(value: widget.notifications),
+        Provider<ProfileRepository>.value(value: widget.profileRepository),
+        Provider<ClockService>(create: (_) => SystemClockService()),
         ProxyProvider<AppDatabase, HabitRepository>(
           update: (_, db, __) => DriftHabitRepository(db),
         ),
-        Provider<ClockService>(create: (_) => SystemClockService()),
         ProxyProvider2<AppDatabase, ClockService, CompletionRepository>(
           update: (_, db, clock, __) => DriftCompletionRepository(db, clock),
         ),
-        Provider<NotificationService>.value(value: widget.notifications),
       ],
       child: Consumer<AppPreferences>(
         builder: (context, prefs, _) {

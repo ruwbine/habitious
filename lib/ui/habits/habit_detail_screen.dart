@@ -5,6 +5,7 @@ import '../../data/repositories/completion_repository.dart';
 import '../../data/repositories/habit_repository.dart';
 import '../../data/services/clock_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../profile_sync.dart';
 import '../core/widgets/habit_icon_badge.dart';
 import '../core/widgets/secondary_button.dart';
 import 'view_models/habit_detail_view_model.dart';
@@ -22,7 +23,7 @@ class HabitDetailScreen extends StatelessWidget {
         ctx.read<CompletionRepository>(),
         ctx.read<ClockService>(),
         habitId: HabitId(habitId),
-        hardcoreProvider: () => false, // wired to ProfileRepository in Task 28
+        hardcoreProvider: () => ctx.read<HardcoreFlag>().value,
       )..load(),
       child: const _Body(),
     );
