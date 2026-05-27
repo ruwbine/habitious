@@ -76,4 +76,16 @@ void main() {
     final s = await comps.computeStreak(const HabitId('h1'), hardcore: false);
     expect(s.currentStreak, 2);
   });
+
+  test('current-week freeze consumption is reflected in freezesRemainingThisWeek', () async {
+    // today = Wed 2026-05-27, schedule = all 7 days, hardcore = false.
+    // Missed scheduled day THIS week (Tue 2026-05-26) consumes the week's freeze.
+    // No completions before/after — should give currentStreak=0 because today
+    // doesn't break streak (we only walk PAST days), and the prior day (Tue)
+    // is missed → freeze consumed → next prior day (Mon 2026-05-25) is also
+    // a different scheduled day, missed, no freezes left → streak ends.
+    // freezesRemainingThisWeek should be 0, not 1.
+    final s = await comps.computeStreak(const HabitId('h1'), hardcore: false);
+    expect(s.freezesRemainingThisWeek, 0);
+  });
 }

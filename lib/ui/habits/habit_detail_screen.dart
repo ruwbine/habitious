@@ -26,8 +26,8 @@ class HabitDetailScreen extends StatelessWidget {
         ctx.read<CompletionRepository>(),
         ctx.read<SocialRepository>(),
         ctx.read<ClockService>(),
+        ctx.read<HardcoreFlag>(),
         habitId: HabitId(habitId),
-        hardcoreProvider: () => ctx.read<HardcoreFlag>().value,
       )..load(),
       child: const _Body(),
     );

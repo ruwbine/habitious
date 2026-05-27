@@ -141,44 +141,49 @@ StreakInfo computeStreakPure({
   int currentStreak = 0;
   int longestStreak = 0;
   int? lastWeekStartEpoch;
+  int freezesAvailableThisWalk = hardcore ? 0 : 1;
+  // Track the freeze state of the CURRENT week (the week containing `today`).
+  // We capture it when we encounter days inside that week during the walk.
+  int currentWeekFreezesRemaining = hardcore ? 0 : 1;
 
-  // Walk back through scheduled days only.
+  final todayWeekStart = today.subtract(
+    Duration(days: (today.weekday - DateTime.monday) % 7),
+  );
+  final todayWeekStartEpoch =
+      DateTime(todayWeekStart.year, todayWeekStart.month, todayWeekStart.day)
+          .millisecondsSinceEpoch;
+
   bool streakStillRunning = true;
   var cursor = today.subtract(const Duration(days: 1));
-  int freezesAvailableThisWeek = hardcore ? 0 : 1;
 
   for (int i = 0; i < 365 && streakStillRunning; i++) {
-    final dayOfWeek = Weekday.values[cursor.weekday - 1];
-    final weekStart = cursor.subtract(
-      Duration(days: (cursor.weekday - DateTime.monday) % 7),
-    );
-    final weekStartEpoch = DateTime(
-      weekStart.year,
-      weekStart.month,
-      weekStart.day,
-    ).millisecondsSinceEpoch;
+    final dayOfWeek = Weekday.values[(cursor.weekday - 1)];
+    final weekStart = cursor
+        .subtract(Duration(days: (cursor.weekday - DateTime.monday) % 7));
+    final weekStartEpoch =
+        DateTime(weekStart.year, weekStart.month, weekStart.day)
+            .millisecondsSinceEpoch;
 
     if (lastWeekStartEpoch != null && weekStartEpoch != lastWeekStartEpoch) {
-      // Crossed a week boundary walking backward — reset freeze budget for the
-      // new (older) week.
-      freezesAvailableThisWeek = hardcore ? 0 : 1;
+      freezesAvailableThisWalk = hardcore ? 0 : 1;
     }
     lastWeekStartEpoch = weekStartEpoch;
 
     if (schedule.contains(dayOfWeek)) {
-      final completed = completions.any(
-        (d) =>
-            d.year == cursor.year &&
-            d.month == cursor.month &&
-            d.day == cursor.day,
-      );
+      final completed = completions.any((d) =>
+          d.year == cursor.year &&
+          d.month == cursor.month &&
+          d.day == cursor.day);
       if (completed) {
         currentStreak++;
         if (currentStreak > longestStreak) longestStreak = currentStreak;
       } else if (hardcore) {
         streakStillRunning = false;
-      } else if (freezesAvailableThisWeek > 0) {
-        freezesAvailableThisWeek--;
+      } else if (freezesAvailableThisWalk > 0) {
+        freezesAvailableThisWalk--;
+        if (weekStartEpoch == todayWeekStartEpoch) {
+          currentWeekFreezesRemaining--;
+        }
       } else {
         streakStillRunning = false;
       }
@@ -186,10 +191,10 @@ StreakInfo computeStreakPure({
     cursor = cursor.subtract(const Duration(days: 1));
   }
 
-  // Report the user's CURRENT-week freeze budget (not the historical walk's).
   return StreakInfo(
     currentStreak: currentStreak,
     longestStreak: longestStreak,
-    freezesRemainingThisWeek: hardcore ? 0 : 1,
+    freezesRemainingThisWeek:
+        currentWeekFreezesRemaining < 0 ? 0 : currentWeekFreezesRemaining,
   );
 }

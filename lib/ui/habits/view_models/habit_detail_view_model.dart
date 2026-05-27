@@ -10,6 +10,7 @@ import '../../../data/repositories/completion_repository.dart';
 import '../../../data/repositories/habit_repository.dart';
 import '../../../data/repositories/social_repository.dart';
 import '../../../data/services/clock_service.dart';
+import '../../../profile_sync.dart';
 import '../../core/command.dart';
 
 class HabitDetailViewModel extends ChangeNotifier {
@@ -17,21 +18,22 @@ class HabitDetailViewModel extends ChangeNotifier {
     this._habits,
     this._completions,
     this._social,
-    this._clock, {
+    this._clock,
+    this._hardcoreFlag, {
     required this.habitId,
-    required this.hardcoreProvider,
   }) {
     toggleDayCommand = Command<DateTime, void>(_toggleDay);
     changeMonthCommand = Command<DateTime, void>(_changeMonth);
     nudgeLazyCommand = Command<void, void>(_nudgeLazy);
+    _hardcoreFlag.addListener(_onHardcoreChanged);
   }
 
   final HabitRepository _habits;
   final CompletionRepository _completions;
   final SocialRepository _social;
   final ClockService _clock;
+  final HardcoreFlag _hardcoreFlag;
   final HabitId habitId;
-  final bool Function() hardcoreProvider;
 
   Habit? habit;
   StreakInfo? streak;
@@ -82,10 +84,12 @@ class HabitDetailViewModel extends ChangeNotifier {
   Future<void> _refreshStreak() async {
     streak = await _completions.computeStreak(
       habitId,
-      hardcore: hardcoreProvider(),
+      hardcore: _hardcoreFlag.value,
     );
     notifyListeners();
   }
+
+  void _onHardcoreChanged() { _refreshStreak(); }
 
   Future<void> _toggleDay(DateTime day) async {
     final done = await _completions.isCompleted(habitId, day);
@@ -111,6 +115,7 @@ class HabitDetailViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _hardcoreFlag.removeListener(_onHardcoreChanged);
     _monthSub?.cancel();
     _groupSub?.cancel();
     _lbSub?.cancel();

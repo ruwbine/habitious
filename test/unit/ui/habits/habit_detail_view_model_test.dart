@@ -6,6 +6,7 @@ import 'package:habitious/data/models/habit_status.dart';
 import 'package:habitious/data/models/typed_ids.dart';
 import 'package:habitious/data/models/weekday.dart';
 import 'package:habitious/data/repositories/fake_social_repository.dart';
+import 'package:habitious/profile_sync.dart';
 import 'package:habitious/ui/habits/view_models/habit_detail_view_model.dart';
 import '../../../fakes/fake_clock_service.dart';
 import '../../../fakes/in_memory_completion_repository.dart';
@@ -39,8 +40,8 @@ void main() {
       comps,
       FakeSocialRepository.seeded(),
       clock,
+      HardcoreFlag(),
       habitId: habitId,
-      hardcoreProvider: () => false,
     );
     await vm.load();
     await vm.toggleDayCommand.run(DateTime(2026, 5, 26));
