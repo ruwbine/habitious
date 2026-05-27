@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import '../../../data/models/habit.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../../data/models/habit_status.dart';
 import '../../../data/repositories/completion_repository.dart';
 import '../../../data/repositories/habit_repository.dart';
@@ -15,10 +15,11 @@ class HabitsListViewModel extends ChangeNotifier {
   List<HabitListItem> _items = const [];
   bool _isLoading = true;
   Object? _error;
-  StreamSubscription<List<Habit>>? _sub;
+  StreamSubscription<List<HabitListItem>>? _sub;
 
   HabitsTab get tab => _tab;
-  List<HabitListItem> get items => _items.where(_match).toList(growable: false);
+  List<HabitListItem> get items =>
+      _items.where(_match).toList(growable: false);
   bool get isLoading => _isLoading;
   Object? get error => _error;
 
@@ -37,19 +38,29 @@ class HabitsListViewModel extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    _sub = _habits.watchHabits().listen((list) async {
-      final futures = list.map((h) async {
-        final progress = await _completions.watchWeeklyProgress(h.id).first;
-        return HabitListItem(
-          habit: h,
-          progress: progress,
-          participantsCount: 1,
-        );
-      });
-      _items = await Future.wait(futures);
-      _isLoading = false;
-      notifyListeners();
-    });
+    _sub = _habits.watchHabits().switchMap<List<HabitListItem>>((list) {
+      if (list.isEmpty) {
+        return Stream.value(const <HabitListItem>[]);
+      }
+      final perHabit = list.map((h) =>
+          _completions.watchWeeklyProgress(h.id).map((p) => HabitListItem(
+                habit: h,
+                progress: p,
+                participantsCount: 1,
+              )));
+      return Rx.combineLatestList<HabitListItem>(perHabit);
+    }).listen(
+      (items) {
+        _items = items;
+        _isLoading = false;
+        notifyListeners();
+      },
+      onError: (Object e) {
+        _error = e;
+        _isLoading = false;
+        notifyListeners();
+      },
+    );
   }
 
   void switchTab(HabitsTab tab) {

@@ -278,6 +278,12 @@ abstract class AppLocalizations {
   /// **'Group completion {percent}%'**
   String groupCompletion(int percent);
 
+  /// No description provided for @leaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboard;
+
   /// No description provided for @weekdayMon.
   ///
   /// In en, this message translates to:

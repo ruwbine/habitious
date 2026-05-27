@@ -109,7 +109,7 @@ class _Body extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           if (vm.leaderboard.isNotEmpty) ...[
-            Text('Лидерборд', style: Theme.of(context).textTheme.titleMedium),
+            Text(l.leaderboard, style: Theme.of(context).textTheme.titleMedium),
             LeaderboardList(entries: vm.leaderboard),
             const SizedBox(height: 12),
           ],

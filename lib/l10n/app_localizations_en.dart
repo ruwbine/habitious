@@ -119,6 +119,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get leaderboard => 'Leaderboard';
+
+  @override
   String get weekdayMon => 'Mon';
 
   @override

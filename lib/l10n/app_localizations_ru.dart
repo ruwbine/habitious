@@ -121,6 +121,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get leaderboard => 'Лидерборд';
+
+  @override
   String get weekdayMon => 'Пн';
 
   @override

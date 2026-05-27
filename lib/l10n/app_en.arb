@@ -37,6 +37,7 @@
   "@streakDays": {"placeholders": {"n": {"type": "int"}}},
   "groupCompletion": "Group completion {percent}%",
   "@groupCompletion": {"placeholders": {"percent": {"type": "int"}}},
+  "leaderboard": "Leaderboard",
   "weekdayMon": "Mon", "weekdayTue": "Tue", "weekdayWed": "Wed",
   "weekdayThu": "Thu", "weekdayFri": "Fri", "weekdaySat": "Sat", "weekdaySun": "Sun",
   "themeSystem": "System", "themeLight": "Light", "themeDark": "Dark",

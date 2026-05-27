@@ -30,6 +30,7 @@
   "weekProgress": "{done}/{total} дней",
   "streakDays": "{n} дней",
   "groupCompletion": "Группа выполнила {percent}%",
+  "leaderboard": "Лидерборд",
   "weekdayMon": "Пн", "weekdayTue": "Вт", "weekdayWed": "Ср",
   "weekdayThu": "Чт", "weekdayFri": "Пт", "weekdaySat": "Сб", "weekdaySun": "Вс",
   "themeSystem": "Системная", "themeLight": "Светлая", "themeDark": "Тёмная",
