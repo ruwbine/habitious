@@ -20,8 +20,22 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends StatefulWidget {
   const _Body();
+  @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Friend> _searchResults = const [];
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -87,6 +101,51 @@ class _Body extends StatelessWidget {
                 await vm.setLocaleCommand.run(v);
                 prefs.setLocale(v);
               },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(l.addFriends, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: l.searchByUsername,
+              border: const OutlineInputBorder(),
+            ),
+            onChanged: (q) async {
+              final results = await context.read<SocialRepository>().searchByUsername(q);
+              if (mounted) setState(() => _searchResults = results);
+            },
+          ),
+          if (_searchResults.isNotEmpty)
+            ..._searchResults.map((f) => ListTile(
+                  leading: CircleAvatar(child: Text(f.displayName.characters.first)),
+                  title: Text(f.displayName),
+                )),
+          const SizedBox(height: 8),
+          ListTile(
+            leading: const Icon(Icons.qr_code),
+            title: Text(l.myQrCode),
+            onTap: () => showDialog<void>(
+              context: context,
+              builder: (_) => AlertDialog(
+                content: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Center(
+                    child: Icon(Icons.qr_code_2, size: 160, color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.qr_code_scanner),
+            title: Text(l.scanQr),
+            onTap: () => showDialog<void>(
+              context: context,
+              builder: (_) => AlertDialog(content: Text(l.scanQr)),
             ),
           ),
           const Divider(height: 32),
