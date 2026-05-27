@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import '../ui/core/widgets/root_shell.dart';
 import '../ui/habits/create_habit_screen.dart';
+import '../ui/habits/habit_detail_screen.dart';
 import '../ui/habits/habits_list_screen.dart';
 import '../ui/stats/stats_screen.dart';
 import '../ui/friends/friends_screen.dart';
@@ -21,6 +22,7 @@ GoRouter buildRouter() {
         ],
       ),
       GoRoute(path: '/create', builder: (_, __) => const CreateHabitScreen()),
+      GoRoute(path: '/habit/:id', builder: (_, state) => HabitDetailScreen(habitId: state.pathParameters['id']!)),
     ],
   );
 }
