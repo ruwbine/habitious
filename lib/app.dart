@@ -4,8 +4,10 @@ import 'app_preferences.dart';
 import 'data/repositories/completion_repository.dart';
 import 'data/repositories/drift_completion_repository.dart';
 import 'data/repositories/drift_habit_repository.dart';
+import 'data/repositories/fake_social_repository.dart';
 import 'data/repositories/habit_repository.dart';
 import 'data/repositories/profile_repository.dart';
+import 'data/repositories/social_repository.dart';
 import 'data/services/app_database.dart';
 import 'data/services/clock_service.dart';
 import 'data/services/notification_service.dart';
@@ -66,6 +68,7 @@ class _HabitiousAppState extends State<HabitiousApp> {
         ProxyProvider2<AppDatabase, ClockService, CompletionRepository>(
           update: (_, db, clock, __) => DriftCompletionRepository(db, clock),
         ),
+        Provider<SocialRepository>(create: (_) => FakeSocialRepository.seeded()),
       ],
       child: Consumer<AppPreferences>(
         builder: (context, prefs, _) {
