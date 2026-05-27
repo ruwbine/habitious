@@ -3,7 +3,12 @@ import '../../../data/models/habit_color.dart';
 import '../../../data/models/habit_icon.dart';
 
 class HabitIconBadge extends StatelessWidget {
-  const HabitIconBadge({super.key, required this.color, required this.icon, this.size = 48});
+  const HabitIconBadge({
+    super.key,
+    required this.color,
+    required this.icon,
+    this.size = 48,
+  });
   final HabitColor color;
   final HabitIcon icon;
   final double size;

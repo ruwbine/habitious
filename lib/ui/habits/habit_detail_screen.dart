@@ -115,7 +115,9 @@ class _Body extends StatelessWidget {
           ],
           SecondaryButton(
             label: l.remindLazyOnes,
-            onPressed: vm.group == null ? null : () => vm.nudgeLazyCommand.run(null),
+            onPressed: vm.group == null
+                ? null
+                : () => vm.nudgeLazyCommand.run(null),
           ),
         ],
       ),

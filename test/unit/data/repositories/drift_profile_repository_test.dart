@@ -23,15 +23,17 @@ void main() {
     final repo = DriftProfileRepository(db);
     // Allow the _ensureRow() future + initial watch emission to complete.
     await Future<void>.delayed(const Duration(milliseconds: 50));
-    await repo.updateProfile(const UserProfile(
-      displayName: 'Test',
-      avatarPath: null,
-      level: 1,
-      xp: 0,
-      hardcoreMode: true,
-      themePreference: ThemePreference.dark,
-      locale: Locale('en'),
-    ));
+    await repo.updateProfile(
+      const UserProfile(
+        displayName: 'Test',
+        avatarPath: null,
+        level: 1,
+        xp: 0,
+        hardcoreMode: true,
+        themePreference: ThemePreference.dark,
+        locale: Locale('en'),
+      ),
+    );
     // Allow the Drift watch listener to fire and update the BehaviorSubject.
     await Future<void>.delayed(const Duration(milliseconds: 50));
     final p = await repo.watchProfile().first;

@@ -68,7 +68,9 @@ class _HabitiousAppState extends State<HabitiousApp> {
         ProxyProvider2<AppDatabase, ClockService, CompletionRepository>(
           update: (_, db, clock, __) => DriftCompletionRepository(db, clock),
         ),
-        Provider<SocialRepository>(create: (_) => FakeSocialRepository.seeded()),
+        Provider<SocialRepository>(
+          create: (_) => FakeSocialRepository.seeded(),
+        ),
       ],
       child: Consumer<AppPreferences>(
         builder: (context, prefs, _) {

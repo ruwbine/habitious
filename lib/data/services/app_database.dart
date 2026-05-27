@@ -37,8 +37,7 @@ class UserProfileTable extends Table {
   TextColumn get avatarPath => text().nullable()();
   IntColumn get level => integer().withDefault(const Constant(1))();
   IntColumn get xp => integer().withDefault(const Constant(0))();
-  BoolColumn get hardcoreMode =>
-      boolean().withDefault(const Constant(false))();
+  BoolColumn get hardcoreMode => boolean().withDefault(const Constant(false))();
   IntColumn get themePreferenceIndex =>
       integer().withDefault(const Constant(0))();
   TextColumn get localeTag => text().withDefault(const Constant('ru'))();

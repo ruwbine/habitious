@@ -28,10 +28,14 @@ class FlutterLocalNotificationsServiceImpl implements NotificationService {
 
   @override
   Future<bool> requestPermission() async {
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-    final ios = _plugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    final ios = _plugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
     final bool? aResult = await android?.requestNotificationsPermission();
     final bool? iResult = await ios?.requestPermissions(
       alert: true,
@@ -83,8 +87,14 @@ class FlutterLocalNotificationsServiceImpl implements NotificationService {
 
   tz.TZDateTime _nextInstance(Weekday day, int hour, int minute) {
     final now = tz.TZDateTime.now(tz.local);
-    var scheduled =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    var scheduled = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
     final targetWeekday = day.index + 1; // Mon=1...Sun=7
     while (scheduled.weekday != targetWeekday || !scheduled.isAfter(now)) {
       scheduled = scheduled.add(const Duration(days: 1));

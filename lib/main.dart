@@ -15,11 +15,13 @@ void main() async {
   final notif = FlutterLocalNotificationsServiceImpl();
   await notif.initialize();
   await ProfileSync(profileRepo, prefs, flag).start();
-  runApp(HabitiousApp(
-    database: db,
-    profileRepository: profileRepo,
-    preferences: prefs,
-    hardcoreFlag: flag,
-    notifications: notif,
-  ));
+  runApp(
+    HabitiousApp(
+      database: db,
+      profileRepository: profileRepo,
+      preferences: prefs,
+      hardcoreFlag: flag,
+      notifications: notif,
+    ),
+  );
 }

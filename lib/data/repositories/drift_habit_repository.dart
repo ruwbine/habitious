@@ -25,9 +25,9 @@ class DriftHabitRepository implements HabitRepository {
 
   @override
   Future<Habit?> findHabit(HabitId id) async {
-    final row = await (_db.select(_db.habits)
-          ..where((t) => t.id.equals(id.value)))
-        .getSingleOrNull();
+    final row = await (_db.select(
+      _db.habits,
+    )..where((t) => t.id.equals(id.value))).getSingleOrNull();
     return row == null ? null : _fromRow(row);
   }
 
@@ -38,8 +38,9 @@ class DriftHabitRepository implements HabitRepository {
 
   @override
   Future<void> archiveHabit(HabitId id) async {
-    await (_db.update(_db.habits)..where((t) => t.id.equals(id.value)))
-        .write(HabitsCompanion(statusIndex: Value(HabitStatus.archived.index)));
+    await (_db.update(_db.habits)..where((t) => t.id.equals(id.value))).write(
+      HabitsCompanion(statusIndex: Value(HabitStatus.archived.index)),
+    );
   }
 
   @override

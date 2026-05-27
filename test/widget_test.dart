@@ -22,22 +22,26 @@ void main() {
 
   testWidgets('app builds without throwing', (tester) async {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
-    final repo = InMemoryProfileRepository(const UserProfile(
-      displayName: 'Test',
-      avatarPath: null,
-      level: 1,
-      xp: 0,
-      hardcoreMode: false,
-      themePreference: ThemePreference.system,
-      locale: Locale('ru'),
-    ));
-    await tester.pumpWidget(HabitiousApp(
-      database: db,
-      profileRepository: repo,
-      preferences: AppPreferences(),
-      hardcoreFlag: HardcoreFlag(),
-      notifications: FakeNotificationService(),
-    ));
+    final repo = InMemoryProfileRepository(
+      const UserProfile(
+        displayName: 'Test',
+        avatarPath: null,
+        level: 1,
+        xp: 0,
+        hardcoreMode: false,
+        themePreference: ThemePreference.system,
+        locale: Locale('ru'),
+      ),
+    );
+    await tester.pumpWidget(
+      HabitiousApp(
+        database: db,
+        profileRepository: repo,
+        preferences: AppPreferences(),
+        hardcoreFlag: HardcoreFlag(),
+        notifications: FakeNotificationService(),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     expect(find.byType(Scaffold), findsAtLeastNWidgets(1));

@@ -31,7 +31,10 @@ class _Body extends StatelessWidget {
       appBar: AppBar(
         title: Text(l.habitsTitle),
         actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: () => context.push('/create')),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => context.push('/create'),
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
@@ -40,8 +43,14 @@ class _Body extends StatelessWidget {
             child: SegmentedButton<HabitsTab>(
               segments: [
                 ButtonSegment(value: HabitsTab.all, label: Text(l.tabAll)),
-                ButtonSegment(value: HabitsTab.active, label: Text(l.tabActive)),
-                ButtonSegment(value: HabitsTab.archive, label: Text(l.tabArchive)),
+                ButtonSegment(
+                  value: HabitsTab.active,
+                  label: Text(l.tabActive),
+                ),
+                ButtonSegment(
+                  value: HabitsTab.archive,
+                  label: Text(l.tabArchive),
+                ),
               ],
               selected: {vm.tab},
               onSelectionChanged: (s) => vm.switchTab(s.first),
@@ -57,7 +66,8 @@ class _Body extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (_, i) => HabitCard(
                 item: vm.items[i],
-                onTap: () => context.push('/habit/${vm.items[i].habit.id.value}'),
+                onTap: () =>
+                    context.push('/habit/${vm.items[i].habit.id.value}'),
               ),
             ),
     );

@@ -8,12 +8,15 @@ import '../../core/command.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   ProfileViewModel(this._repo) {
-    toggleHardcoreModeCommand = Command<bool, void>((v) async =>
-        _save((p) => p.copyWith(hardcoreMode: v)));
-    setThemePreferenceCommand = Command<ThemePreference, void>((v) async =>
-        _save((p) => p.copyWith(themePreference: v)));
-    setLocaleCommand = Command<Locale, void>((v) async =>
-        _save((p) => p.copyWith(locale: v)));
+    toggleHardcoreModeCommand = Command<bool, void>(
+      (v) async => _save((p) => p.copyWith(hardcoreMode: v)),
+    );
+    setThemePreferenceCommand = Command<ThemePreference, void>(
+      (v) async => _save((p) => p.copyWith(themePreference: v)),
+    );
+    setLocaleCommand = Command<Locale, void>(
+      (v) async => _save((p) => p.copyWith(locale: v)),
+    );
   }
 
   final ProfileRepository _repo;

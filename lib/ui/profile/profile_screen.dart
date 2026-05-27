@@ -50,22 +50,25 @@ class _BodyState extends State<_Body> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Row(children: [
-            CircleAvatar(
-              radius: 32,
-              child: Text(
-                p.displayName.isNotEmpty ? p.displayName[0] : '?',
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 32,
+                child: Text(p.displayName.isNotEmpty ? p.displayName[0] : '?'),
               ),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(p.displayName, style: Theme.of(context).textTheme.titleMedium),
-                Text(l.level(p.level)),
-              ],
-            ),
-          ]),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    p.displayName,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(l.level(p.level)),
+                ],
+              ),
+            ],
+          ),
           const Divider(height: 32),
           SwitchListTile(
             title: Text(l.hardcoreMode),
@@ -77,9 +80,18 @@ class _BodyState extends State<_Body> {
             trailing: DropdownButton<ThemePreference>(
               value: p.themePreference,
               items: [
-                DropdownMenuItem(value: ThemePreference.system, child: Text(l.themeSystem)),
-                DropdownMenuItem(value: ThemePreference.light, child: Text(l.themeLight)),
-                DropdownMenuItem(value: ThemePreference.dark, child: Text(l.themeDark)),
+                DropdownMenuItem(
+                  value: ThemePreference.system,
+                  child: Text(l.themeSystem),
+                ),
+                DropdownMenuItem(
+                  value: ThemePreference.light,
+                  child: Text(l.themeLight),
+                ),
+                DropdownMenuItem(
+                  value: ThemePreference.dark,
+                  child: Text(l.themeDark),
+                ),
               ],
               onChanged: (v) async {
                 if (v == null) return;
@@ -114,15 +126,21 @@ class _BodyState extends State<_Body> {
               border: const OutlineInputBorder(),
             ),
             onChanged: (q) async {
-              final results = await context.read<SocialRepository>().searchByUsername(q);
+              final results = await context
+                  .read<SocialRepository>()
+                  .searchByUsername(q);
               if (mounted) setState(() => _searchResults = results);
             },
           ),
           if (_searchResults.isNotEmpty)
-            ..._searchResults.map((f) => ListTile(
-                  leading: CircleAvatar(child: Text(f.displayName.characters.first)),
-                  title: Text(f.displayName),
-                )),
+            ..._searchResults.map(
+              (f) => ListTile(
+                leading: CircleAvatar(
+                  child: Text(f.displayName.characters.first),
+                ),
+                title: Text(f.displayName),
+              ),
+            ),
           const SizedBox(height: 8),
           ListTile(
             leading: const Icon(Icons.qr_code),
@@ -134,7 +152,11 @@ class _BodyState extends State<_Body> {
                   width: 200,
                   height: 200,
                   child: Center(
-                    child: Icon(Icons.qr_code_2, size: 160, color: Theme.of(context).colorScheme.primary),
+                    child: Icon(
+                      Icons.qr_code_2,
+                      size: 160,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ),
@@ -157,24 +179,35 @@ class _BodyState extends State<_Body> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l.friendRequests(reqs.length), style: Theme.of(context).textTheme.titleMedium),
-                  ...reqs.map((r) => ListTile(
-                        leading: CircleAvatar(child: Text(r.friend.displayName.characters.first)),
-                        title: Text(r.friend.displayName),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.check),
-                              onPressed: () => context.read<SocialRepository>().acceptFriendRequest(r.friend.id),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () => context.read<SocialRepository>().declineFriendRequest(r.friend.id),
-                            ),
-                          ],
-                        ),
-                      )),
+                  Text(
+                    l.friendRequests(reqs.length),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  ...reqs.map(
+                    (r) => ListTile(
+                      leading: CircleAvatar(
+                        child: Text(r.friend.displayName.characters.first),
+                      ),
+                      title: Text(r.friend.displayName),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.check),
+                            onPressed: () => context
+                                .read<SocialRepository>()
+                                .acceptFriendRequest(r.friend.id),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => context
+                                .read<SocialRepository>()
+                                .declineFriendRequest(r.friend.id),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               );
             },
@@ -188,12 +221,23 @@ class _BodyState extends State<_Body> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l.myFriends, style: Theme.of(context).textTheme.titleMedium),
-                  ...friends.take(3).map((f) => ListTile(
-                        leading: CircleAvatar(child: Text(f.displayName.characters.first)),
-                        title: Text(f.displayName),
-                        subtitle: Text(l.sharedHabitsCount(f.sharedHabitsCount)),
-                      )),
+                  Text(
+                    l.myFriends,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  ...friends
+                      .take(3)
+                      .map(
+                        (f) => ListTile(
+                          leading: CircleAvatar(
+                            child: Text(f.displayName.characters.first),
+                          ),
+                          title: Text(f.displayName),
+                          subtitle: Text(
+                            l.sharedHabitsCount(f.sharedHabitsCount),
+                          ),
+                        ),
+                      ),
                 ],
               );
             },

@@ -21,11 +21,12 @@ class InMemoryCompletionRepository implements CompletionRepository {
   DateTime _norm(DateTime d) => DateTime(d.year, d.month, d.day);
 
   @override
-  Stream<Set<DateTime>> watchCompletionDates(HabitId id, DateRange range) async* {
+  Stream<Set<DateTime>> watchCompletionDates(
+    HabitId id,
+    DateRange range,
+  ) async* {
     yield _filter(id, range);
-    yield* _events.stream
-        .where((x) => x == id)
-        .map((_) => _filter(id, range));
+    yield* _events.stream.where((x) => x == id).map((_) => _filter(id, range));
   }
 
   Set<DateTime> _filter(HabitId id, DateRange range) =>

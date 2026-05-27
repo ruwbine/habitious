@@ -18,8 +18,7 @@ class HabitsListViewModel extends ChangeNotifier {
   StreamSubscription<List<Habit>>? _sub;
 
   HabitsTab get tab => _tab;
-  List<HabitListItem> get items =>
-      _items.where(_match).toList(growable: false);
+  List<HabitListItem> get items => _items.where(_match).toList(growable: false);
   bool get isLoading => _isLoading;
   Object? get error => _error;
 
@@ -41,7 +40,11 @@ class HabitsListViewModel extends ChangeNotifier {
     _sub = _habits.watchHabits().listen((list) async {
       final futures = list.map((h) async {
         final progress = await _completions.watchWeeklyProgress(h.id).first;
-        return HabitListItem(habit: h, progress: progress, participantsCount: 1);
+        return HabitListItem(
+          habit: h,
+          progress: progress,
+          participantsCount: 1,
+        );
       });
       _items = await Future.wait(futures);
       _isLoading = false;

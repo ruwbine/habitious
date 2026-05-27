@@ -15,17 +15,19 @@ void main() {
   test('toggles day and refreshes month completions', () async {
     final habits = InMemoryHabitRepository();
     const habitId = HabitId('h1');
-    await habits.upsertHabit(Habit(
-      id: habitId,
-      name: 'Drink',
-      color: HabitColor.purple,
-      icon: HabitIcon.drop,
-      schedule: Weekday.values.toSet(),
-      reminder: null,
-      status: HabitStatus.active,
-      createdAt: DateTime(2026, 5, 1),
-      groupId: null,
-    ));
+    await habits.upsertHabit(
+      Habit(
+        id: habitId,
+        name: 'Drink',
+        color: HabitColor.purple,
+        icon: HabitIcon.drop,
+        schedule: Weekday.values.toSet(),
+        reminder: null,
+        status: HabitStatus.active,
+        createdAt: DateTime(2026, 5, 1),
+        groupId: null,
+      ),
+    );
     final clock = FakeClockService(DateTime(2026, 5, 27));
     final comps = InMemoryCompletionRepository(
       todayProvider: () => clock.today(),

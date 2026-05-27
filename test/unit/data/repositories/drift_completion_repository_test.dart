@@ -65,10 +65,7 @@ void main() {
   test('hardcore mode resets streak on first miss', () async {
     await comps.markCompleted(const HabitId('h1'), DateTime(2026, 5, 26));
     await comps.markCompleted(const HabitId('h1'), DateTime(2026, 5, 25));
-    final s = await comps.computeStreak(
-      const HabitId('h1'),
-      hardcore: true,
-    );
+    final s = await comps.computeStreak(const HabitId('h1'), hardcore: true);
     expect(s.currentStreak, 2);
   });
 
@@ -76,10 +73,7 @@ void main() {
     await comps.markCompleted(const HabitId('h1'), DateTime(2026, 5, 26));
     // 2026-05-25 missed → consumes the freeze
     await comps.markCompleted(const HabitId('h1'), DateTime(2026, 5, 24));
-    final s = await comps.computeStreak(
-      const HabitId('h1'),
-      hardcore: false,
-    );
+    final s = await comps.computeStreak(const HabitId('h1'), hardcore: false);
     expect(s.currentStreak, 2);
   });
 }

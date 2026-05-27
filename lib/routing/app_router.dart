@@ -22,7 +22,11 @@ GoRouter buildRouter() {
         ],
       ),
       GoRoute(path: '/create', builder: (_, __) => const CreateHabitScreen()),
-      GoRoute(path: '/habit/:id', builder: (_, state) => HabitDetailScreen(habitId: state.pathParameters['id']!)),
+      GoRoute(
+        path: '/habit/:id',
+        builder: (_, state) =>
+            HabitDetailScreen(habitId: state.pathParameters['id']!),
+      ),
     ],
   );
 }

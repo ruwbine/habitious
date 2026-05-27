@@ -12,16 +12,16 @@ import '../../../fakes/in_memory_completion_repository.dart';
 import '../../../fakes/in_memory_habit_repository.dart';
 
 Habit _mk(String id, HabitStatus status) => Habit(
-      id: HabitId(id),
-      name: id,
-      color: HabitColor.purple,
-      icon: HabitIcon.drop,
-      schedule: Weekday.values.toSet(),
-      reminder: null,
-      status: status,
-      createdAt: DateTime(2026, 5, 1),
-      groupId: null,
-    );
+  id: HabitId(id),
+  name: id,
+  color: HabitColor.purple,
+  icon: HabitIcon.drop,
+  schedule: Weekday.values.toSet(),
+  reminder: null,
+  status: status,
+  createdAt: DateTime(2026, 5, 1),
+  groupId: null,
+);
 
 void main() {
   test('loads habits and exposes them filtered by tab', () async {

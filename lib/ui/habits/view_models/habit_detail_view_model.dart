@@ -74,9 +74,9 @@ class HabitDetailViewModel extends ChangeNotifier {
     _monthSub = _completions
         .watchCompletionDates(habitId, DateRange(start, end))
         .listen((set) {
-      monthCompletions = set;
-      notifyListeners();
-    });
+          monthCompletions = set;
+          notifyListeners();
+        });
   }
 
   Future<void> _refreshStreak() async {

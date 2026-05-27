@@ -34,35 +34,33 @@ class DriftCompletionRepository implements CompletionRepository {
 
   @override
   Future<bool> isCompleted(HabitId id, DateTime date) async {
-    final r = await (_db.select(_db.habitCompletions)
-          ..where(
-            (t) =>
-                t.habitId.equals(id.value) &
-                t.date.equals(_normalize(date)),
-          ))
-        .getSingleOrNull();
+    final r =
+        await (_db.select(_db.habitCompletions)..where(
+              (t) =>
+                  t.habitId.equals(id.value) & t.date.equals(_normalize(date)),
+            ))
+            .getSingleOrNull();
     return r != null;
   }
 
   @override
   Future<void> markCompleted(HabitId id, DateTime date) async {
-    await _db.into(_db.habitCompletions).insertOnConflictUpdate(
-      HabitCompletionsCompanion.insert(
-        habitId: id.value,
-        date: _normalize(date),
-        markedAt: _clock.now(),
-      ),
-    );
+    await _db
+        .into(_db.habitCompletions)
+        .insertOnConflictUpdate(
+          HabitCompletionsCompanion.insert(
+            habitId: id.value,
+            date: _normalize(date),
+            markedAt: _clock.now(),
+          ),
+        );
   }
 
   @override
   Future<void> unmarkCompleted(HabitId id, DateTime date) async {
-    await (_db.delete(_db.habitCompletions)
-          ..where(
-            (t) =>
-                t.habitId.equals(id.value) &
-                t.date.equals(_normalize(date)),
-          ))
+    await (_db.delete(_db.habitCompletions)..where(
+          (t) => t.habitId.equals(id.value) & t.date.equals(_normalize(date)),
+        ))
         .go();
   }
 
@@ -89,10 +87,7 @@ class DriftCompletionRepository implements CompletionRepository {
   Stream<WeeklyProgress> watchWeeklyProgress(HabitId id) async* {
     final start = _startOfWeek(_clock.today());
     final end = start.add(const Duration(days: 7));
-    await for (final dates in watchCompletionDates(
-      id,
-      DateRange(start, end),
-    )) {
+    await for (final dates in watchCompletionDates(id, DateRange(start, end))) {
       final habit = await _fetchHabit(id);
       if (habit == null) {
         yield const WeeklyProgress(completedDays: 0, scheduledDays: 0);
@@ -106,9 +101,9 @@ class DriftCompletionRepository implements CompletionRepository {
   }
 
   Future<Habit?> _fetchHabit(HabitId id) async {
-    final row = await (_db.select(_db.habits)
-          ..where((t) => t.id.equals(id.value)))
-        .getSingleOrNull();
+    final row = await (_db.select(
+      _db.habits,
+    )..where((t) => t.id.equals(id.value))).getSingleOrNull();
     if (row == null) return null;
     return Habit(
       id: HabitId(row.id),
@@ -124,9 +119,9 @@ class DriftCompletionRepository implements CompletionRepository {
   }
 
   Future<Set<DateTime>> _allDates(HabitId id) async {
-    final rows = await (_db.select(_db.habitCompletions)
-          ..where((t) => t.habitId.equals(id.value)))
-        .get();
+    final rows = await (_db.select(
+      _db.habitCompletions,
+    )..where((t) => t.habitId.equals(id.value))).get();
     return rows.map((r) => _normalize(r.date)).toSet();
   }
 

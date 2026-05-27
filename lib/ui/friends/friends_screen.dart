@@ -21,7 +21,9 @@ class FriendsScreen extends StatelessWidget {
             itemCount: list.length,
             separatorBuilder: (_, __) => const Divider(height: 0),
             itemBuilder: (_, i) => ListTile(
-              leading: CircleAvatar(child: Text(list[i].displayName.characters.first)),
+              leading: CircleAvatar(
+                child: Text(list[i].displayName.characters.first),
+              ),
               title: Text(list[i].displayName),
               subtitle: Text(l.sharedHabitsCount(list[i].sharedHabitsCount)),
             ),
