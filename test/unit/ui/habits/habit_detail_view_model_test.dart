@@ -5,6 +5,7 @@ import 'package:habitious/data/models/habit_icon.dart';
 import 'package:habitious/data/models/habit_status.dart';
 import 'package:habitious/data/models/typed_ids.dart';
 import 'package:habitious/data/models/weekday.dart';
+import 'package:habitious/data/repositories/fake_social_repository.dart';
 import 'package:habitious/ui/habits/view_models/habit_detail_view_model.dart';
 import '../../../fakes/fake_clock_service.dart';
 import '../../../fakes/in_memory_completion_repository.dart';
@@ -34,6 +35,7 @@ void main() {
     final vm = HabitDetailViewModel(
       habits,
       comps,
+      FakeSocialRepository.seeded(),
       clock,
       habitId: habitId,
       hardcoreProvider: () => false,
