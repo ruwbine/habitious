@@ -3,6 +3,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 
 part 'app_database.g.dart';
 
+@DataClassName('HabitRow')
 class Habits extends Table {
   TextColumn get id => text()();
   TextColumn get name => text().withLength(min: 1, max: 80)();
@@ -19,6 +20,7 @@ class Habits extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+@DataClassName('HabitCompletionRow')
 class HabitCompletions extends Table {
   TextColumn get habitId =>
       text().references(Habits, #id, onDelete: KeyAction.cascade)();
@@ -28,6 +30,7 @@ class HabitCompletions extends Table {
   Set<Column> get primaryKey => {habitId, date};
 }
 
+@DataClassName('UserProfileRow')
 class UserProfileTable extends Table {
   IntColumn get id => integer().withDefault(const Constant(0))();
   TextColumn get displayName => text()();

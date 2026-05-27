@@ -3,7 +3,7 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
+class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -142,7 +142,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
   static const String $name = 'habits';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Habit> instance, {
+    Insertable<HabitRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -236,9 +236,9 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Habit map(Map<String, dynamic> data, {String? tablePrefix}) {
+  HabitRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Habit(
+    return HabitRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -288,7 +288,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
   }
 }
 
-class Habit extends DataClass implements Insertable<Habit> {
+class HabitRow extends DataClass implements Insertable<HabitRow> {
   final String id;
   final String name;
   final int colorIndex;
@@ -299,7 +299,7 @@ class Habit extends DataClass implements Insertable<Habit> {
   final int statusIndex;
   final DateTime createdAt;
   final String? groupId;
-  const Habit({
+  const HabitRow({
     required this.id,
     required this.name,
     required this.colorIndex,
@@ -350,12 +350,12 @@ class Habit extends DataClass implements Insertable<Habit> {
     );
   }
 
-  factory Habit.fromJson(
+  factory HabitRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Habit(
+    return HabitRow(
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       colorIndex: serializer.fromJson<int>(json['colorIndex']),
@@ -385,7 +385,7 @@ class Habit extends DataClass implements Insertable<Habit> {
     };
   }
 
-  Habit copyWith({
+  HabitRow copyWith({
     String? id,
     String? name,
     int? colorIndex,
@@ -396,7 +396,7 @@ class Habit extends DataClass implements Insertable<Habit> {
     int? statusIndex,
     DateTime? createdAt,
     Value<String?> groupId = const Value.absent(),
-  }) => Habit(
+  }) => HabitRow(
     id: id ?? this.id,
     name: name ?? this.name,
     colorIndex: colorIndex ?? this.colorIndex,
@@ -410,8 +410,8 @@ class Habit extends DataClass implements Insertable<Habit> {
     createdAt: createdAt ?? this.createdAt,
     groupId: groupId.present ? groupId.value : this.groupId,
   );
-  Habit copyWithCompanion(HabitsCompanion data) {
-    return Habit(
+  HabitRow copyWithCompanion(HabitsCompanion data) {
+    return HabitRow(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       colorIndex: data.colorIndex.present
@@ -437,7 +437,7 @@ class Habit extends DataClass implements Insertable<Habit> {
 
   @override
   String toString() {
-    return (StringBuffer('Habit(')
+    return (StringBuffer('HabitRow(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('colorIndex: $colorIndex, ')
@@ -468,7 +468,7 @@ class Habit extends DataClass implements Insertable<Habit> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Habit &&
+      (other is HabitRow &&
           other.id == this.id &&
           other.name == this.name &&
           other.colorIndex == this.colorIndex &&
@@ -481,7 +481,7 @@ class Habit extends DataClass implements Insertable<Habit> {
           other.groupId == this.groupId);
 }
 
-class HabitsCompanion extends UpdateCompanion<Habit> {
+class HabitsCompanion extends UpdateCompanion<HabitRow> {
   final Value<String> id;
   final Value<String> name;
   final Value<int> colorIndex;
@@ -525,7 +525,7 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
        scheduleBitmask = Value(scheduleBitmask),
        statusIndex = Value(statusIndex),
        createdAt = Value(createdAt);
-  static Insertable<Habit> custom({
+  static Insertable<HabitRow> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<int>? colorIndex,
@@ -640,7 +640,7 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
 }
 
 class $HabitCompletionsTable extends HabitCompletions
-    with TableInfo<$HabitCompletionsTable, HabitCompletion> {
+    with TableInfo<$HabitCompletionsTable, HabitCompletionRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -688,7 +688,7 @@ class $HabitCompletionsTable extends HabitCompletions
   static const String $name = 'habit_completions';
   @override
   VerificationContext validateIntegrity(
-    Insertable<HabitCompletion> instance, {
+    Insertable<HabitCompletionRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -723,9 +723,9 @@ class $HabitCompletionsTable extends HabitCompletions
   @override
   Set<GeneratedColumn> get $primaryKey => {habitId, date};
   @override
-  HabitCompletion map(Map<String, dynamic> data, {String? tablePrefix}) {
+  HabitCompletionRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return HabitCompletion(
+    return HabitCompletionRow(
       habitId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}habit_id'],
@@ -747,11 +747,12 @@ class $HabitCompletionsTable extends HabitCompletions
   }
 }
 
-class HabitCompletion extends DataClass implements Insertable<HabitCompletion> {
+class HabitCompletionRow extends DataClass
+    implements Insertable<HabitCompletionRow> {
   final String habitId;
   final DateTime date;
   final DateTime markedAt;
-  const HabitCompletion({
+  const HabitCompletionRow({
     required this.habitId,
     required this.date,
     required this.markedAt,
@@ -773,12 +774,12 @@ class HabitCompletion extends DataClass implements Insertable<HabitCompletion> {
     );
   }
 
-  factory HabitCompletion.fromJson(
+  factory HabitCompletionRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return HabitCompletion(
+    return HabitCompletionRow(
       habitId: serializer.fromJson<String>(json['habitId']),
       date: serializer.fromJson<DateTime>(json['date']),
       markedAt: serializer.fromJson<DateTime>(json['markedAt']),
@@ -794,17 +795,17 @@ class HabitCompletion extends DataClass implements Insertable<HabitCompletion> {
     };
   }
 
-  HabitCompletion copyWith({
+  HabitCompletionRow copyWith({
     String? habitId,
     DateTime? date,
     DateTime? markedAt,
-  }) => HabitCompletion(
+  }) => HabitCompletionRow(
     habitId: habitId ?? this.habitId,
     date: date ?? this.date,
     markedAt: markedAt ?? this.markedAt,
   );
-  HabitCompletion copyWithCompanion(HabitCompletionsCompanion data) {
-    return HabitCompletion(
+  HabitCompletionRow copyWithCompanion(HabitCompletionsCompanion data) {
+    return HabitCompletionRow(
       habitId: data.habitId.present ? data.habitId.value : this.habitId,
       date: data.date.present ? data.date.value : this.date,
       markedAt: data.markedAt.present ? data.markedAt.value : this.markedAt,
@@ -813,7 +814,7 @@ class HabitCompletion extends DataClass implements Insertable<HabitCompletion> {
 
   @override
   String toString() {
-    return (StringBuffer('HabitCompletion(')
+    return (StringBuffer('HabitCompletionRow(')
           ..write('habitId: $habitId, ')
           ..write('date: $date, ')
           ..write('markedAt: $markedAt')
@@ -826,13 +827,13 @@ class HabitCompletion extends DataClass implements Insertable<HabitCompletion> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is HabitCompletion &&
+      (other is HabitCompletionRow &&
           other.habitId == this.habitId &&
           other.date == this.date &&
           other.markedAt == this.markedAt);
 }
 
-class HabitCompletionsCompanion extends UpdateCompanion<HabitCompletion> {
+class HabitCompletionsCompanion extends UpdateCompanion<HabitCompletionRow> {
   final Value<String> habitId;
   final Value<DateTime> date;
   final Value<DateTime> markedAt;
@@ -851,7 +852,7 @@ class HabitCompletionsCompanion extends UpdateCompanion<HabitCompletion> {
   }) : habitId = Value(habitId),
        date = Value(date),
        markedAt = Value(markedAt);
-  static Insertable<HabitCompletion> custom({
+  static Insertable<HabitCompletionRow> custom({
     Expression<String>? habitId,
     Expression<DateTime>? date,
     Expression<DateTime>? markedAt,
@@ -910,7 +911,7 @@ class HabitCompletionsCompanion extends UpdateCompanion<HabitCompletion> {
 }
 
 class $UserProfileTableTable extends UserProfileTable
-    with TableInfo<$UserProfileTableTable, UserProfileTableData> {
+    with TableInfo<$UserProfileTableTable, UserProfileRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1023,7 +1024,7 @@ class $UserProfileTableTable extends UserProfileTable
   static const String $name = 'user_profile_table';
   @override
   VerificationContext validateIntegrity(
-    Insertable<UserProfileTableData> instance, {
+    Insertable<UserProfileRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1087,9 +1088,9 @@ class $UserProfileTableTable extends UserProfileTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  UserProfileTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UserProfileRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserProfileTableData(
+    return UserProfileRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -1131,8 +1132,7 @@ class $UserProfileTableTable extends UserProfileTable
   }
 }
 
-class UserProfileTableData extends DataClass
-    implements Insertable<UserProfileTableData> {
+class UserProfileRow extends DataClass implements Insertable<UserProfileRow> {
   final int id;
   final String displayName;
   final String? avatarPath;
@@ -1141,7 +1141,7 @@ class UserProfileTableData extends DataClass
   final bool hardcoreMode;
   final int themePreferenceIndex;
   final String localeTag;
-  const UserProfileTableData({
+  const UserProfileRow({
     required this.id,
     required this.displayName,
     this.avatarPath,
@@ -1182,12 +1182,12 @@ class UserProfileTableData extends DataClass
     );
   }
 
-  factory UserProfileTableData.fromJson(
+  factory UserProfileRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UserProfileTableData(
+    return UserProfileRow(
       id: serializer.fromJson<int>(json['id']),
       displayName: serializer.fromJson<String>(json['displayName']),
       avatarPath: serializer.fromJson<String?>(json['avatarPath']),
@@ -1215,7 +1215,7 @@ class UserProfileTableData extends DataClass
     };
   }
 
-  UserProfileTableData copyWith({
+  UserProfileRow copyWith({
     int? id,
     String? displayName,
     Value<String?> avatarPath = const Value.absent(),
@@ -1224,7 +1224,7 @@ class UserProfileTableData extends DataClass
     bool? hardcoreMode,
     int? themePreferenceIndex,
     String? localeTag,
-  }) => UserProfileTableData(
+  }) => UserProfileRow(
     id: id ?? this.id,
     displayName: displayName ?? this.displayName,
     avatarPath: avatarPath.present ? avatarPath.value : this.avatarPath,
@@ -1234,8 +1234,8 @@ class UserProfileTableData extends DataClass
     themePreferenceIndex: themePreferenceIndex ?? this.themePreferenceIndex,
     localeTag: localeTag ?? this.localeTag,
   );
-  UserProfileTableData copyWithCompanion(UserProfileTableCompanion data) {
-    return UserProfileTableData(
+  UserProfileRow copyWithCompanion(UserProfileTableCompanion data) {
+    return UserProfileRow(
       id: data.id.present ? data.id.value : this.id,
       displayName: data.displayName.present
           ? data.displayName.value
@@ -1257,7 +1257,7 @@ class UserProfileTableData extends DataClass
 
   @override
   String toString() {
-    return (StringBuffer('UserProfileTableData(')
+    return (StringBuffer('UserProfileRow(')
           ..write('id: $id, ')
           ..write('displayName: $displayName, ')
           ..write('avatarPath: $avatarPath, ')
@@ -1284,7 +1284,7 @@ class UserProfileTableData extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UserProfileTableData &&
+      (other is UserProfileRow &&
           other.id == this.id &&
           other.displayName == this.displayName &&
           other.avatarPath == this.avatarPath &&
@@ -1295,7 +1295,7 @@ class UserProfileTableData extends DataClass
           other.localeTag == this.localeTag);
 }
 
-class UserProfileTableCompanion extends UpdateCompanion<UserProfileTableData> {
+class UserProfileTableCompanion extends UpdateCompanion<UserProfileRow> {
   final Value<int> id;
   final Value<String> displayName;
   final Value<String?> avatarPath;
@@ -1324,7 +1324,7 @@ class UserProfileTableCompanion extends UpdateCompanion<UserProfileTableData> {
     this.themePreferenceIndex = const Value.absent(),
     this.localeTag = const Value.absent(),
   }) : displayName = Value(displayName);
-  static Insertable<UserProfileTableData> custom({
+  static Insertable<UserProfileRow> custom({
     Expression<int>? id,
     Expression<String>? displayName,
     Expression<String>? avatarPath,
@@ -1476,10 +1476,10 @@ typedef $$HabitsTableUpdateCompanionBuilder =
     });
 
 final class $$HabitsTableReferences
-    extends BaseReferences<_$AppDatabase, $HabitsTable, Habit> {
+    extends BaseReferences<_$AppDatabase, $HabitsTable, HabitRow> {
   $$HabitsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$HabitCompletionsTable, List<HabitCompletion>>
+  static MultiTypedResultKey<$HabitCompletionsTable, List<HabitCompletionRow>>
   _habitCompletionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.habitCompletions,
     aliasName: $_aliasNameGenerator(db.habits.id, db.habitCompletions.habitId),
@@ -1725,14 +1725,14 @@ class $$HabitsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $HabitsTable,
-          Habit,
+          HabitRow,
           $$HabitsTableFilterComposer,
           $$HabitsTableOrderingComposer,
           $$HabitsTableAnnotationComposer,
           $$HabitsTableCreateCompanionBuilder,
           $$HabitsTableUpdateCompanionBuilder,
-          (Habit, $$HabitsTableReferences),
-          Habit,
+          (HabitRow, $$HabitsTableReferences),
+          HabitRow,
           PrefetchHooks Function({bool habitCompletionsRefs})
         > {
   $$HabitsTableTableManager(_$AppDatabase db, $HabitsTable table)
@@ -1815,9 +1815,9 @@ class $$HabitsTableTableManager
                 return [
                   if (habitCompletionsRefs)
                     await $_getPrefetchedData<
-                      Habit,
+                      HabitRow,
                       $HabitsTable,
-                      HabitCompletion
+                      HabitCompletionRow
                     >(
                       currentTable: table,
                       referencedTable: $$HabitsTableReferences
@@ -1843,14 +1843,14 @@ typedef $$HabitsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $HabitsTable,
-      Habit,
+      HabitRow,
       $$HabitsTableFilterComposer,
       $$HabitsTableOrderingComposer,
       $$HabitsTableAnnotationComposer,
       $$HabitsTableCreateCompanionBuilder,
       $$HabitsTableUpdateCompanionBuilder,
-      (Habit, $$HabitsTableReferences),
-      Habit,
+      (HabitRow, $$HabitsTableReferences),
+      HabitRow,
       PrefetchHooks Function({bool habitCompletionsRefs})
     >;
 typedef $$HabitCompletionsTableCreateCompanionBuilder =
@@ -1870,7 +1870,11 @@ typedef $$HabitCompletionsTableUpdateCompanionBuilder =
 
 final class $$HabitCompletionsTableReferences
     extends
-        BaseReferences<_$AppDatabase, $HabitCompletionsTable, HabitCompletion> {
+        BaseReferences<
+          _$AppDatabase,
+          $HabitCompletionsTable,
+          HabitCompletionRow
+        > {
   $$HabitCompletionsTableReferences(
     super.$_db,
     super.$_table,
@@ -2026,14 +2030,14 @@ class $$HabitCompletionsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $HabitCompletionsTable,
-          HabitCompletion,
+          HabitCompletionRow,
           $$HabitCompletionsTableFilterComposer,
           $$HabitCompletionsTableOrderingComposer,
           $$HabitCompletionsTableAnnotationComposer,
           $$HabitCompletionsTableCreateCompanionBuilder,
           $$HabitCompletionsTableUpdateCompanionBuilder,
-          (HabitCompletion, $$HabitCompletionsTableReferences),
-          HabitCompletion,
+          (HabitCompletionRow, $$HabitCompletionsTableReferences),
+          HabitCompletionRow,
           PrefetchHooks Function({bool habitId})
         > {
   $$HabitCompletionsTableTableManager(
@@ -2132,14 +2136,14 @@ typedef $$HabitCompletionsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $HabitCompletionsTable,
-      HabitCompletion,
+      HabitCompletionRow,
       $$HabitCompletionsTableFilterComposer,
       $$HabitCompletionsTableOrderingComposer,
       $$HabitCompletionsTableAnnotationComposer,
       $$HabitCompletionsTableCreateCompanionBuilder,
       $$HabitCompletionsTableUpdateCompanionBuilder,
-      (HabitCompletion, $$HabitCompletionsTableReferences),
-      HabitCompletion,
+      (HabitCompletionRow, $$HabitCompletionsTableReferences),
+      HabitCompletionRow,
       PrefetchHooks Function({bool habitId})
     >;
 typedef $$UserProfileTableTableCreateCompanionBuilder =
@@ -2312,21 +2316,21 @@ class $$UserProfileTableTableTableManager
         RootTableManager<
           _$AppDatabase,
           $UserProfileTableTable,
-          UserProfileTableData,
+          UserProfileRow,
           $$UserProfileTableTableFilterComposer,
           $$UserProfileTableTableOrderingComposer,
           $$UserProfileTableTableAnnotationComposer,
           $$UserProfileTableTableCreateCompanionBuilder,
           $$UserProfileTableTableUpdateCompanionBuilder,
           (
-            UserProfileTableData,
+            UserProfileRow,
             BaseReferences<
               _$AppDatabase,
               $UserProfileTableTable,
-              UserProfileTableData
+              UserProfileRow
             >,
           ),
-          UserProfileTableData,
+          UserProfileRow,
           PrefetchHooks Function()
         > {
   $$UserProfileTableTableTableManager(
@@ -2394,21 +2398,17 @@ typedef $$UserProfileTableTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $UserProfileTableTable,
-      UserProfileTableData,
+      UserProfileRow,
       $$UserProfileTableTableFilterComposer,
       $$UserProfileTableTableOrderingComposer,
       $$UserProfileTableTableAnnotationComposer,
       $$UserProfileTableTableCreateCompanionBuilder,
       $$UserProfileTableTableUpdateCompanionBuilder,
       (
-        UserProfileTableData,
-        BaseReferences<
-          _$AppDatabase,
-          $UserProfileTableTable,
-          UserProfileTableData
-        >,
+        UserProfileRow,
+        BaseReferences<_$AppDatabase, $UserProfileTableTable, UserProfileRow>,
       ),
-      UserProfileTableData,
+      UserProfileRow,
       PrefetchHooks Function()
     >;
 
