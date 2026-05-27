@@ -5,6 +5,7 @@ import '../../data/repositories/completion_repository.dart';
 import '../../data/repositories/habit_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../core/widgets/habit_card.dart';
+import '../core/widgets/pill_tabs.dart';
 import 'view_models/habit_list_item.dart';
 import 'view_models/habits_list_view_model.dart';
 
@@ -27,48 +28,67 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.watch<HabitsListViewModel>();
     final l = AppLocalizations.of(context);
+    final cs = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text(l.habitsTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => context.push('/create'),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: SegmentedButton<HabitsTab>(
-              segments: [
-                ButtonSegment(value: HabitsTab.all, label: Text(l.tabAll)),
-                ButtonSegment(
-                  value: HabitsTab.active,
-                  label: Text(l.tabActive),
-                ),
-                ButtonSegment(
-                  value: HabitsTab.archive,
-                  label: Text(l.tabArchive),
-                ),
-              ],
-              selected: {vm.tab},
-              onSelectionChanged: (s) => vm.switchTab(s.first),
-            ),
+        titleSpacing: 16,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            l.habitsTitle,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_none),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: cs.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.add, size: 20, color: Colors.white),
+            ),
+            onPressed: () => context.push('/create'),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: vm.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: vm.items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (_, i) => HabitCard(
-                item: vm.items[i],
-                onTap: () =>
-                    context.push('/habit/${vm.items[i].habit.id.value}'),
-              ),
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                  child: PillTabs<HabitsTab>(
+                    tabs: [
+                      PillTab(value: HabitsTab.all, label: l.tabAll),
+                      PillTab(value: HabitsTab.active, label: l.tabActive),
+                      PillTab(value: HabitsTab.archive, label: l.tabArchive),
+                    ],
+                    selected: vm.tab,
+                    onChanged: vm.switchTab,
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                    itemCount: vm.items.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (_, i) => HabitCard(
+                      item: vm.items[i],
+                      onTap: () =>
+                          context.push('/habit/${vm.items[i].habit.id.value}'),
+                    ),
+                  ),
+                ),
+              ],
             ),
     );
   }

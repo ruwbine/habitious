@@ -28,6 +28,7 @@ dependencies:
   timezone: ^0.9.4
   rxdart: ^0.27.7
   intl: any
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

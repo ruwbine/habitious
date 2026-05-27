@@ -19,34 +19,74 @@ class RootShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final items = <_NavItem>[
+      _NavItem(Icons.home_outlined, Icons.home_rounded, l.navHome),
+      _NavItem(Icons.bar_chart_outlined, Icons.bar_chart_rounded, l.navStats),
+      _NavItem(Icons.group_outlined, Icons.group_rounded, l.navFriends),
+      _NavItem(Icons.person_outline, Icons.person_rounded, l.navProfile),
+    ];
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (i) => context.go(_tabs[i]),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.home_outlined),
-            selectedIcon: const Icon(Icons.home),
-            label: l.navHome,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border(
+            top: BorderSide(color: cs.surfaceContainerHighest, width: 1),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.bar_chart_outlined),
-            selectedIcon: const Icon(Icons.bar_chart),
-            label: l.navStats,
+        ),
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            height: 64,
+            child: Row(
+              children: List.generate(items.length, (i) {
+                final selected = _currentIndex == i;
+                final item = items[i];
+                return Expanded(
+                  child: InkWell(
+                    onTap: () => context.go(_tabs[i]),
+                    splashColor: cs.primary.withValues(alpha: 0.08),
+                    highlightColor: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          selected ? item.activeIcon : item.icon,
+                          size: 26,
+                          color: selected
+                              ? cs.primary
+                              : cs.onSurface.withValues(alpha: 0.5),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: selected
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                            color: selected
+                                ? cs.primary
+                                : cs.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.group_outlined),
-            selectedIcon: const Icon(Icons.group),
-            label: l.navFriends,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.person_outline),
-            selectedIcon: const Icon(Icons.person),
-            label: l.navProfile,
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+class _NavItem {
+  const _NavItem(this.icon, this.activeIcon, this.label);
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
 }

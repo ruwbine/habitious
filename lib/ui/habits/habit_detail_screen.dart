@@ -7,7 +7,6 @@ import '../../data/repositories/social_repository.dart';
 import '../../data/services/clock_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../profile_sync.dart';
-import '../core/widgets/habit_icon_badge.dart';
 import '../core/widgets/secondary_button.dart';
 import 'view_models/habit_detail_view_model.dart';
 import 'widgets/group_completion_header.dart';
@@ -46,46 +45,22 @@ class _Body extends StatelessWidget {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
-      appBar: AppBar(title: Text(habit.name)),
+      appBar: AppBar(
+        title: Text(habit.name),
+        actions: [
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+        ],
+      ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: [
-          Row(
-            children: [
-              HabitIconBadge(color: habit.color, icon: habit.icon, size: 64),
-              const SizedBox(width: 16),
-              if (vm.streak != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '🔥',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    Text(
-                      l.streakDays(vm.streak!.currentStreak),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-            ],
-          ),
-          if (vm.group != null) ...[
-            const SizedBox(height: 12),
-            GroupCompletionHeader(
-              percent: vm.group!.completionPercentThisWeek,
-              streak: vm.streak?.currentStreak ?? 0,
-            ),
-          ],
-          const SizedBox(height: 24),
-          HabitHeatmap(
-            month: vm.visibleMonth,
-            completedDates: vm.monthCompletions,
-            scheduledDays: habit.schedule,
+          GroupCompletionHeader(
+            percent: vm.group?.completionPercentThisWeek ?? 0,
+            streak: vm.streak?.currentStreak ?? 0,
             color: habit.color,
-            onTapDay: (d) => vm.toggleDayCommand.run(d),
+            icon: habit.icon,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Row(
             children: [
               IconButton(
@@ -94,11 +69,14 @@ class _Body extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.chevron_left),
               ),
-              const Spacer(),
-              Text(
-                '${vm.visibleMonth.year}-${vm.visibleMonth.month.toString().padLeft(2, '0')}',
+              Expanded(
+                child: Center(
+                  child: Text(
+                    _monthLabel(vm.visibleMonth),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
               ),
-              const Spacer(),
               IconButton(
                 onPressed: () => vm.changeMonthCommand.run(
                   DateTime(vm.visibleMonth.year, vm.visibleMonth.month + 1),
@@ -107,11 +85,20 @@ class _Body extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 8),
+          HabitHeatmap(
+            month: vm.visibleMonth,
+            completedDates: vm.monthCompletions,
+            scheduledDays: habit.schedule,
+            color: habit.color,
+            onTapDay: (d) => vm.toggleDayCommand.run(d),
+          ),
           const SizedBox(height: 24),
           if (vm.leaderboard.isNotEmpty) ...[
             Text(l.leaderboard, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
             LeaderboardList(entries: vm.leaderboard),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
           ],
           SecondaryButton(
             label: l.remindLazyOnes,
@@ -124,3 +111,20 @@ class _Body extends StatelessWidget {
     );
   }
 }
+
+const _monthsRu = [
+  'Январь',
+  'Февраль',
+  'Март',
+  'Апрель',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентябрь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь',
+];
+
+String _monthLabel(DateTime d) => '${_monthsRu[d.month - 1]} ${d.year}';
