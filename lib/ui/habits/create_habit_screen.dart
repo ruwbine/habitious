@@ -6,6 +6,7 @@ import '../../data/models/habit_icon.dart';
 import '../../data/models/reminder_time.dart';
 import '../../data/models/weekday.dart';
 import '../../data/repositories/habit_repository.dart';
+import '../../data/services/notification_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../core/widgets/day_chips_selector.dart';
 import '../core/widgets/habit_icon_badge.dart';
@@ -18,7 +19,10 @@ class CreateHabitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => CreateHabitViewModel(context.read<HabitRepository>()),
+      create: (_) => CreateHabitViewModel(
+        context.read<HabitRepository>(),
+        context.read<NotificationService>(),
+      ),
       child: const _Body(),
     );
   }

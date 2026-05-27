@@ -7,14 +7,35 @@ import 'data/repositories/drift_habit_repository.dart';
 import 'data/repositories/habit_repository.dart';
 import 'data/services/app_database.dart';
 import 'data/services/clock_service.dart';
+import 'data/services/notification_service.dart';
 import 'l10n/app_localizations.dart';
 import 'routing/app_router.dart';
 import 'ui/core/themes/dark_theme.dart';
 import 'ui/core/themes/light_theme.dart';
 
-class HabitiousApp extends StatelessWidget {
-  HabitiousApp({super.key});
-  final _router = buildRouter();
+class HabitiousApp extends StatefulWidget {
+  const HabitiousApp({super.key, required this.notifications});
+
+  final NotificationService notifications;
+
+  @override
+  State<HabitiousApp> createState() => _HabitiousAppState();
+}
+
+class _HabitiousAppState extends State<HabitiousApp> {
+  late final _router = buildRouter();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await widget.notifications.requestPermission();
+      } catch (_) {
+        // Permission request can fail silently on simulators/headless tests.
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +53,7 @@ class HabitiousApp extends StatelessWidget {
         ProxyProvider2<AppDatabase, ClockService, CompletionRepository>(
           update: (_, db, clock, __) => DriftCompletionRepository(db, clock),
         ),
+        Provider<NotificationService>.value(value: widget.notifications),
       ],
       child: Consumer<AppPreferences>(
         builder: (context, prefs, _) {

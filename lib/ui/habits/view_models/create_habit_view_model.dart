@@ -7,10 +7,11 @@ import '../../../data/models/reminder_time.dart';
 import '../../../data/models/typed_ids.dart';
 import '../../../data/models/weekday.dart';
 import '../../../data/repositories/habit_repository.dart';
+import '../../../data/services/notification_service.dart';
 import '../../core/command.dart';
 
 class CreateHabitViewModel extends ChangeNotifier {
-  CreateHabitViewModel(this._habits) {
+  CreateHabitViewModel(this._habits, this._notifications) {
     submitCommand = Command<void, HabitId?>((_) async {
       if (!canSubmit) return null;
       final id = HabitId('h_${DateTime.now().microsecondsSinceEpoch}');
@@ -26,11 +27,13 @@ class CreateHabitViewModel extends ChangeNotifier {
         groupId: null,
       );
       await _habits.upsertHabit(habit);
+      await _notifications.scheduleHabitReminders(habit);
       return id;
     });
   }
 
   final HabitRepository _habits;
+  final NotificationService _notifications;
 
   String _name = '';
   Set<Weekday> _schedule = Weekday.values.toSet();
